@@ -22,3 +22,36 @@ class UserRoles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
+class Subject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    
+
+# class Chapter(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(100), nullable=False)
+#     description = db.Column(db.Text, nullable=False)
+#     # subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
+    
+
+# class Quiz(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
+#     date_of_quiz = db.Column(db.String(100), nullable=False)
+#     time_duration = db.Column(db.String(50), nullable=False)
+    
+# class Questions(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+#     name = db.Column(db.String(100), nullable=False)
+#     question_statement = db.Column(db.Text, nullable=False)
+#     option = db.Column(db.String(100), nullable=False)
+
+# class Scores(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+#     users_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     time_stamp_of_attempt = db.Column(db.String(50), nullable=False)
+#     total_scored = db.Column(db.Integer,nullable=False)
