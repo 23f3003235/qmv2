@@ -8,6 +8,9 @@ from application.user_datastore import user_datastore
 from application.database import db
 from application.crud_apis import *
 
+from sqlalchemy import event
+from sqlalchemy.engine import Engine
+import sqlite3
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,6 +20,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['SECURITY_PASSWORD_SALT'] = 'my_mad2app'
 app.config['SECRET_KEY'] = 'my_mad2'
+
+
+
+@event.listens_for(Engine, "connect")
+def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
+    if isinstance(dbapi_connection, sqlite3.Connection):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
 
 db.init_app(app)
 security = Security(app, user_datastore)
@@ -43,6 +55,15 @@ api.add_resource(Logout, '/api/auth/logout')
 
 api.add_resource(SubjectListApi, '/api/subject')
 api.add_resource(SubjectApi,'/api/subject/<int:subject_id>')
+
+api.add_resource(ChapterListApi, '/api/chapter/<int:subject_id>')
+api.add_resource(ChapterApi,'/api/chapter/<int:chapter_id>')
+
+api.add_resource(QuizListApi, '/api/quiz')
+api.add_resource(QuizApi,'/api/quiz/<int:quiz_id>')
+
+api.add_resource(QuestionsListApi, '/api/questions/<int:quiz_id>')
+api.add_resource(QuestionsApi,'/api/questions/<int:questions_id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
