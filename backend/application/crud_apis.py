@@ -18,6 +18,28 @@ class SubjectApi(Resource):
         }
 
         return make_response(jsonify(result), 200)
+    def put(self, subject_id):
+        subject_data = request.get_json()
+        if not subject_data or 'name' not in subject_data:
+            return {'message': 'Subject name is required'}, 400
+        
+        subject = Subject.query.get(subject_id)
+        if not subject:
+            return {'message': 'Subject not found'}, 404
+        
+        subject.name = subject_data['name']
+        subject.description = subject_data.get('description', subject.description)
+        db.session.commit()
+
+        result = {
+            'message': 'Subject updated successfully',
+            'subject': {
+                'id': subject.id,
+                'name': subject.name,
+                'description': subject.description
+            }
+        }
+        return make_response(jsonify(result), 200)
     
 class SubjectListApi(Resource):
     def get(self):
@@ -59,3 +81,4 @@ class SubjectListApi(Resource):
         }
 
         return make_response(jsonify(result), 201)
+
