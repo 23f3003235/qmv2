@@ -1,10 +1,12 @@
 from flask_restful import Resource
 from application.models import *
 from flask import make_response, jsonify, request
+from flask_security import auth_required, roles_required
 
 #<<<<<<<<<<<<<<SUBJECT/CHAPTERS>>>>>>>>>>>>>>>
 
 class SubjectApi(Resource):
+    
     def get(self, subject_id):
         subject = Subject.query.get(subject_id)
         if not subject:
@@ -64,6 +66,8 @@ class SubjectListApi(Resource):
             } for subject in subjects]
         return make_response(jsonify({'message': 'Subjects retrieved!', 'subjects': result}), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def post(self):
         subject_data = request.get_json()
         if not subject_data or 'name' not in subject_data:
