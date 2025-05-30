@@ -27,7 +27,7 @@ class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    chapters = db.relationship(
+    chapter = db.relationship(
         'Chapter',
         backref='subject',
         cascade='all, delete-orphan',
@@ -45,9 +45,9 @@ class Chapter(db.Model):
         db.ForeignKey('subject.id', ondelete='CASCADE'),
         nullable=False
     )
-    quizes = db.relationship(
-        'Chapter',
-        backref='quiz',
+    quiz = db.relationship(
+        'Quiz',
+        backref='chapter',
         cascade='all, delete-orphan',
         passive_deletes=True
     )
@@ -63,7 +63,7 @@ class Quiz(db.Model):
         nullable=False
     )
     questions = db.relationship(
-        'Question',
+        'Questions',
         backref='quiz',
         cascade='all, delete-orphan',
         passive_deletes=True

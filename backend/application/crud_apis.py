@@ -249,24 +249,27 @@ class QuizListApi(Resource):
         
         result = [{
                 'id': quiz.id,
-                'date': quiz.name,
-                'duration': quiz.description
+                'date': quiz.date,
+                'duration': quiz.duration
             } for quiz in quizes]
         return make_response(jsonify({'message': 'Quizes retrieved!', 'quizes': result}), 200)
     
-    def post(self):
+    
+class QuizCreateApi(Resource):  
+    def post(self, chapter_id):
         quiz_data = request.get_json()
         if not quiz_data or 'date' not in quiz_data or 'duration' not in quiz_data:
             return {'message': 'Quiz date & duration is required'}, 400
         
         new_quiz = Quiz(
             date = quiz_data['date'],
-            duration = quiz_data.get('duration', '')
+            duration = quiz_data.get('duration', ''),
+            chapter_id=chapter_id
         )
 
-        existing_quiz = Quiz.query.filter_by(date=new_quiz.date).first()
+        existing_quiz = Quiz.query.filter_by(date=new_quiz.chapter_id).first()
         if existing_quiz:
-            return {'message': 'Quiz name already exists'},400
+            return {'message': 'Quiz already exists'},400
         
         db.session.add(new_quiz)
         db.session.commit()
@@ -281,8 +284,6 @@ class QuizListApi(Resource):
         }
 
         return make_response(jsonify(result), 201)
-    
-
 
 
     
@@ -377,7 +378,8 @@ class QuestionsListApi(Resource):
             'question': {
                 'id': new_question.id,
                 'name': new_question.name,
-                'question_statement': new_question.question_statement
+                'question_statement': new_question.question_statement,
+                'option': new_question.option
             }
         }
 

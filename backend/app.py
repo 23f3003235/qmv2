@@ -7,6 +7,7 @@ from application.models import *
 from application.user_datastore import user_datastore
 from application.database import db
 from application.crud_apis import *
+from application import worker
 
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
@@ -17,6 +18,9 @@ api = Api(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///raj.db' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['CELERY_BROKER_URL'] = "redis://localhost:6379/0"
+app.config['CELERY_RESULT_BACKEND'] = "redis://localhost:6379/0"
 
 app.config['SECURITY_PASSWORD_SALT'] = 'my_mad2app'
 app.config['SECRET_KEY'] = 'my_mad2'
@@ -59,6 +63,7 @@ api.add_resource(SubjectApi,'/api/subject/<int:subject_id>')
 api.add_resource(ChapterListApi, '/api/chapter/<int:subject_id>')
 api.add_resource(ChapterApi,'/api/chapter/<int:chapter_id>')
 
+api.add_resource(QuizCreateApi, '/api/quiz/<int:chapter_id>')
 api.add_resource(QuizListApi, '/api/quiz')
 api.add_resource(QuizApi,'/api/quiz/<int:quiz_id>')
 
