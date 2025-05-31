@@ -11,6 +11,7 @@ cd backend
 celery -A celery_app.celery worker --loglevel=info --pool=solo
 // beat
 celery -A celery_app.celery beat --loglevel=info
+```
 
 # Run Mailhog
 ```
