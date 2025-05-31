@@ -6,7 +6,8 @@ from flask_security import auth_required, roles_required
 #<<<<<<<<<<<<<<SUBJECT/CHAPTERS>>>>>>>>>>>>>>>
 
 class SubjectApi(Resource):
-    
+    @auth_required('token')
+    @roles_required('admin')
     def get(self, subject_id):
         subject = Subject.query.get(subject_id)
         if not subject:
@@ -22,6 +23,9 @@ class SubjectApi(Resource):
         }
 
         return make_response(jsonify(result), 200)
+    
+    @auth_required('token')
+    @roles_required('admin')
     def put(self, subject_id):
         subject_data = request.get_json()
         if not subject_data or 'name' not in subject_data:
@@ -44,6 +48,9 @@ class SubjectApi(Resource):
             }
         }
         return make_response(jsonify(result), 200)
+    
+    @auth_required('token')
+    @roles_required('admin')
     def delete(self, subject_id):
         subject = Subject.query.get(subject_id)
         if not subject:
@@ -54,6 +61,8 @@ class SubjectApi(Resource):
         return make_response(jsonify({'message': 'Subject deleted!'}, 200))
     
 class SubjectListApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')
     def get(self):
         subjects = Subject.query.all()
         if not subjects:
@@ -101,6 +110,8 @@ class SubjectListApi(Resource):
 
     
 class ChapterApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')
     def get(self, chapter_id):
         chapter = Chapter.query.get(chapter_id)
         if not chapter:
@@ -117,6 +128,8 @@ class ChapterApi(Resource):
 
         return make_response(jsonify(result), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def put(self, chapter_id):
         chapter_data = request.get_json()
         if not chapter_data or 'name' not in chapter_data:
@@ -140,6 +153,8 @@ class ChapterApi(Resource):
         }
         return make_response(jsonify(result), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def delete(self, chapter_id):
         chapter = Chapter.query.get(chapter_id)
         if not chapter:
@@ -150,6 +165,8 @@ class ChapterApi(Resource):
         return make_response(jsonify({'message': 'Chapter deleted!'}, 200))
     
 class ChapterListApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')
     def get(self, subject_id):
         chapters = Chapter.query.filter_by(subject_id=subject_id).all()
         if not chapters:
@@ -162,6 +179,8 @@ class ChapterListApi(Resource):
             } for chapter in chapters]
         return make_response(jsonify({'message': 'Chapters retrieved!', 'chapters': result}), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def post(self, subject_id):
         chapter_data = request.get_json()
         if not chapter_data or 'name' not in chapter_data:
@@ -198,6 +217,8 @@ class ChapterListApi(Resource):
 
 
 class QuizApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')
     def get(self, quiz_id):
         quiz = Quiz.query.get(quiz_id)
         if not quiz:
@@ -213,6 +234,9 @@ class QuizApi(Resource):
         }
 
         return make_response(jsonify(result), 200)
+    
+    @auth_required('token')
+    @roles_required('admin')
     def put(self, quiz_id):
         quiz_data = request.get_json()
         if not quiz_data or 'date' not in quiz_data or 'duration' not in quiz_data:
@@ -236,6 +260,8 @@ class QuizApi(Resource):
         }
         return make_response(jsonify(result), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def delete(self, quiz_id):
         quiz = Quiz.query.get(quiz_id)
         if not quiz:
@@ -246,6 +272,8 @@ class QuizApi(Resource):
         return make_response(jsonify({'message': 'Quiz deleted!'}, 200))
     
 class QuizListApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')
     def get(self):
         quizes = Quiz.query.all()
         if not quizes:
@@ -259,7 +287,9 @@ class QuizListApi(Resource):
         return make_response(jsonify({'message': 'Quizes retrieved!', 'quizes': result}), 200)
     
     
-class QuizCreateApi(Resource):  
+class QuizCreateApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')  
     def post(self, chapter_id):
         quiz_data = request.get_json()
         if not quiz_data or 'date' not in quiz_data or 'duration' not in quiz_data:
@@ -292,6 +322,8 @@ class QuizCreateApi(Resource):
 
     
 class QuestionsApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')
     def get(self, questions_id):
         questions = Questions.query.get(questions_id)
         if not questions:
@@ -309,6 +341,8 @@ class QuestionsApi(Resource):
 
         return make_response(jsonify(result), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def put(self, questions_id):
         question_data = request.get_json()
         if not question_data or 'name' not in question_data or 'question_statement' not in question_data or 'option' not in question_data:
@@ -334,6 +368,8 @@ class QuestionsApi(Resource):
         }
         return make_response(jsonify(result), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def delete(self, questions_id):
         questions = Questions.query.get(questions_id)
         if not questions:
@@ -344,6 +380,8 @@ class QuestionsApi(Resource):
         return make_response(jsonify({'message': 'Question deleted!'}, 200))
     
 class QuestionsListApi(Resource):
+    @auth_required('token')
+    @roles_required('admin')
     def get(self, quiz_id):
         questions = Questions.query.filter_by(quiz_id=quiz_id).all()
         if not questions:
@@ -358,6 +396,8 @@ class QuestionsListApi(Resource):
             } for question in questions]
         return make_response(jsonify({'message': 'Questions retrieved!', 'questions': result}), 200)
     
+    @auth_required('token')
+    @roles_required('admin')
     def post(self, quiz_id):
         question_data = request.get_json()
         if not question_data or 'name' not in question_data or 'question_statement' not in question_data or 'option' not in question_data:

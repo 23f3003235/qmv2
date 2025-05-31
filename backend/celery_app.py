@@ -32,7 +32,7 @@ def monthly_report():
             {% endfor %}
             """
             from jinja2 import Template
-            send_mail(user.email, "visit","hiclick")
+            send_mail(user.email, "visit","monthly report")
     print('mails sent')
 
 daily_remainders()
