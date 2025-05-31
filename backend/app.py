@@ -50,6 +50,18 @@ with app.app_context():
             roles = [user_role, admin_role],
         )
     db.session.commit()
+
+
+# from celery_app import generate_csv
+class ExportCSV(Resource):
+    def get(self):
+        from celery_app import generate_csv
+        data = [{'name':'mahesh'},{'name':'suresh'}]
+        generate_csv.delay(data, filename=f'static/raj.csv')
+        return "CSV export initialised, you'll receive mail"
+    
+api.add_resource(ExportCSV, '/api/export_csv')
+
 app.app_context().push()
 
 from auth_apis import *

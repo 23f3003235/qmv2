@@ -3,6 +3,8 @@ from application.models import *
 from flask import make_response, jsonify, request
 from flask_security import auth_required, roles_required
 
+
+
 #<<<<<<<<<<<<<<SUBJECT/CHAPTERS>>>>>>>>>>>>>>>
 
 class SubjectApi(Resource):
